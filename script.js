@@ -10,9 +10,28 @@ background.src = './assets/backgroundSpace_01.1.png';
 let bgX = 0;
 let bgSpeed = 1;
 
-const titleText = 'Prepare-se para a batalha espacial!';
+const titleText ={
+  writing: 'PREPARE-SE PARA A BATALHA ESPACIAL!',
+  color: '#f0f0f0',
+  font: '37px Orbitron',
+  positionY: 80,
+  
+}
+ 
+// Objetos de Instrução Separados
+const movementInstructionText = {
+  writing: 'Use as setas para mover a nave,',
+  color: '#f0f0f0',
+  font: '28x Orbitron',
+  positionY: 320,
+};
 
-const instructionText = 'Utilize as setas para movimentar sua nave, aperte espaço para atirar e enter para começar';
+const shootingAndStartInstructionText = {
+  writing: 'Aperte espaço para atirar e, enter para começar',
+  color: '#f0f0f0',
+  font: '28px Orbitron',
+  positionY: 350,
+};
 
 function update (){
   bgX -= bgSpeed;
@@ -27,9 +46,9 @@ function draw() {
   context.drawImage(background, bgX + canvas.width, 0, canvas.width, canvas.height);
 
   drawText(titleText)
+  drawText(movementInstructionText);
+  drawText(shootingAndStartInstructionText);
 }
-
-
 
 const spaceship = {
   spriteX: 150,   //Where spaceship position in X starts in sprite
@@ -54,17 +73,17 @@ const spaceship = {
 
 function drawText (text) {
   
-  context.fillStyle = "#f0f0f0";
-  context.font = '47px Orbitron'
+  context.fillStyle = text.color;
+  context.font = text.font;
 
-  const textMetrics = context.measureText(text);
-  const textWidth = textMetrics.width;
+  function calculateTextPosition (text){
+    const textMetrics = context.measureText(text.writing);
+    const textWidth = textMetrics.width;
+    const textX = (canvas.width - textWidth)/2;
+    return textX;
+  }
 
-  const textX = (canvas.width - textWidth)/2;
-
-  const textY = 80
-
-  context.fillText(text, textX, textY);
+  context.fillText(text.writing, calculateTextPosition(text), text.positionY);
 }
 
 function loop(){
