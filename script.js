@@ -40,16 +40,6 @@ function update (){
   }
 }
 
-function draw() {
-  context.clearRect(0, 0, canvas.width, canvas.height);
-  context.drawImage(background, bgX, 0, canvas.width, canvas.height);
-  context.drawImage(background, bgX + canvas.width, 0, canvas.width, canvas.height);
-
-  drawText(titleText)
-  drawText(movementInstructionText);
-  drawText(shootingAndStartInstructionText);
-}
-
 const spaceship = {
   spriteX: 150,   //Where spaceship position in X starts in sprite
   spriteY: 200,   //Where spaceship position in Y starts in sprite
@@ -67,8 +57,13 @@ const spaceship = {
       spaceship.x, spaceship.y,
       spaceship.characterWidth, spaceship.characterHeight,
     );
-
   }
+}
+
+function drawBackground (){
+  context.clearRect(0, 0, canvas.width, canvas.height);  //Clean canvas
+  context.drawImage(background, bgX, 0, canvas.width, canvas.height); // draw background
+  context.drawImage(background, bgX + canvas.width, 0, canvas.width, canvas.height); //draw second background to apply scrolling
 }
 
 function drawText (text) {
@@ -86,13 +81,40 @@ function drawText (text) {
   context.fillText(text.writing, calculateTextPosition(text), text.positionY);
 }
 
+const startScreen = {
+  draw: function () {
+    drawBackground ();
+
+    //Add instructions:
+    drawText(titleText)
+    drawText(movementInstructionText);
+    drawText(shootingAndStartInstructionText);
+  }  
+}
+
+const gameplayScreen = {
+  draw:  function(){
+    drawBackground ()
+  }
+}
+
+let currentScreen = startScreen;
+
 function loop(){
+  
   update();
-  draw();
+  currentScreen.draw();
   spaceship.drawCharacter();
   requestAnimationFrame(loop);
-
 }
+
+document.addEventListener('keydown', function(event){
+  if(event.code === 'Space'){
+    if(currentScreen === startScreen){
+      currentScreen = gameplayScreen;
+    }
+  }
+})
 
 background.onload = function(){
   loop();
