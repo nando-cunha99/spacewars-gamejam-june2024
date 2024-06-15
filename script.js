@@ -14,8 +14,7 @@ const titleText ={
   writing: 'PREPARE-SE PARA A BATALHA ESPACIAL!',
   color: '#f0f0f0',
   font: '37px Orbitron',
-  positionY: 80,
-  
+  positionY: 80, 
 }
  
 // Objetos de Instrução Separados
@@ -33,12 +32,15 @@ const shootingAndStartInstructionText = {
   positionY: 350,
 };
 
+//scrolls background
 function update (){
   bgX -= bgSpeed;
   if (bgX <= -canvas.width) {
     bgX = 0;
   }
 }
+
+let enemies = []; //array to storage enemies
 
 const spaceship = {
   spriteX: 150,   //Where spaceship position in X starts in sprite
@@ -57,6 +59,53 @@ const spaceship = {
       spaceship.x, spaceship.y,
       spaceship.characterWidth, spaceship.characterHeight,
     );
+  },
+  // moveCharacter: function() {
+  //   document.addEventListener('keydown', function(event){
+  //     switch(event.code){
+  //       case 'ArrowUp':
+  //         spaceship.y -= 0.09
+  //         break;
+  //       case 'ArrowDown':
+  //         spaceship.y += 0.09
+  //         break;
+  //       case 'ArrowRight':
+  //         spaceship.x += 0.09
+  //         break;
+  //       case 'ArrowLeft':
+  //       spaceship.x -= 0.09
+  //       break;
+  //     }
+  //   })
+  // },
+}
+
+const ufo = {
+  spriteX: 637,
+  spriteY: 215,
+  spriteWidth: 445,
+  spriteHeight: 232,
+  ufoX: canvas.width + 200,
+  ufoY: 300,
+  characterWidth: 110,
+  characterHeight: 93,
+  speed: 2,
+  condition: true,
+  drawCharacter: function () {
+    context.drawImage(
+      sprites,
+      ufo.spriteX, ufo.spriteY,
+      ufo.spriteWidth, ufo.spriteHeight,
+      ufo.ufoX, ufo.ufoY,
+      ufo.characterWidth, ufo.characterHeight,
+    );
+  },
+  update: function() {
+    ufo.ufoX -= ufo.speed
+    if(ufo.ufoX + ufo.characterWidth < 0){
+      ufo.ufoX = canvas.width + 200;
+      ufo.ufoY = Math.random() * (canvas.height - ufo.characterHeight);
+    }
   }
 }
 
@@ -105,17 +154,25 @@ function loop(){
   update();
   currentScreen.draw();
   spaceship.drawCharacter();
+  if (currentScreen === gameplayScreen){
+    //spaceship.moveCharacter();
+    ufo.drawCharacter();
+    ufo.update();
+  }
   requestAnimationFrame(loop);
 }
 
-document.addEventListener('keydown', function(event){
-  if(event.code === 'Space'){
-    if(currentScreen === startScreen){
-      currentScreen = gameplayScreen;
+function changeScreen() {
+  document.addEventListener('keydown', function(event){
+    if(event.code === 'Space'){
+      if(currentScreen === startScreen){
+        currentScreen = gameplayScreen;
+      }
     }
-  }
-})
+  })
+}
 
 background.onload = function(){
   loop();
+  changeScreen();
 }
