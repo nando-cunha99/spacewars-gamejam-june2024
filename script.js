@@ -60,6 +60,26 @@ const spaceship = {
   }
 }
 
+const ufo = {
+  spriteX: 637,
+  spriteY: 215,
+  spriteWidth: 445,
+  spriteHeight: 232,
+  ufoX: 0,
+  ufoY: 0,
+  characterWidth: 110,
+  characterHeight: 93,
+  drawCharacter() {
+    context.drawImage(
+      sprites,
+      ufo.spriteX, ufo.spriteY,
+      ufo.spriteWidth, ufo.spriteHeight,
+      ufo.ufoX, ufo.ufoY,
+      ufo.characterWidth, ufo.characterHeight,
+    );
+  },
+}
+
 function drawBackground (){
   context.clearRect(0, 0, canvas.width, canvas.height);  //Clean canvas
   context.drawImage(background, bgX, 0, canvas.width, canvas.height); // draw background
@@ -105,6 +125,7 @@ function loop(){
   update();
   currentScreen.draw();
   spaceship.drawCharacter();
+  ufo.drawCharacter();
   requestAnimationFrame(loop);
 }
 
